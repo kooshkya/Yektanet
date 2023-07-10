@@ -38,10 +38,6 @@ def create_advertiser(request):
 
 
 def ad_page(request):
-    for advertiser in Advertiser.objects.all():
-        for ad in advertiser.ad_set.all():
-            ViewEvent.objects.create(ad=ad, view_time=timezone.now(), view_ip=request.META["REMOTE_ADDR"])
-
     return render(request, "advertiser_management/ads.html", context={
         'advertisers': Advertiser.objects.all(),
     })
