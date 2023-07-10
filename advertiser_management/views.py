@@ -8,7 +8,7 @@ from .models import *
 # Create your views here.
 def index(request):
     return render(request, "advertiser_management/index.html",
-                  context={'ads': Ad.objects.all().order_by("advertiser__name").values(),
+                  context={'ads': Ad.objects.all().order_by("advertiser__name"),
                            'advertisers': Advertiser.objects.all()})
 
 
@@ -39,7 +39,7 @@ def create_advertiser(request):
 
 def ad_page(request):
     for advertiser in Advertiser.objects.all():
-        for ad in advertiser.ads():
+        for ad in advertiser.ad_set.all():
             ViewEvent.objects.create(ad=ad, view_time=timezone.now(), view_ip=request.META["REMOTE_ADDR"])
 
     return render(request, "advertiser_management/ads.html", context={
