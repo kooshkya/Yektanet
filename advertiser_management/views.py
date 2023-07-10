@@ -6,7 +6,7 @@ from .models import *
 
 # Create your views here.
 def index(request):
-    return render(request, "advertiser_management/index.html", None)
+    return render(request, "advertiser_management/index.html", context={'ads': Ad.objects.all(), 'advertisers': Advertiser.objects.all()})
 
 
 def create_ad(request):
@@ -25,6 +25,13 @@ def create_ad(request):
 
 
 def ad_page(request):
+    for advertiser in Advertiser.objects.all():
+        for ad in advertiser.ads():
+            ad.views += 1
+            advertiser.views += 1
+            ad.save()
+        advertiser.save()
+
     return render(request, "advertiser_management/ads.html", context={
         'advertisers': Advertiser.objects.all(),
     })
@@ -34,4 +41,6 @@ def handle_click(request, ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
     ad.clicks += 1
     ad.advertiser.clicks += 1
+    ad.save()
+    ad.advertiser.save()
     return HttpResponseRedirect(ad.link)

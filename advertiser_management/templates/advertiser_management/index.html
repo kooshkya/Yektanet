@@ -8,5 +8,18 @@
   </head>
   <body>
     <h1>index</h1>
+    <ul>
+        {% for advertiser in advertisers %}
+            <li>{{ advertiser.id }}-{{ advertiser.name }}-- views: {{ advertiser.views }} clicks: {{ advertiser.clicks }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+        {% for ad in ads %}
+            <li>
+                {{ ad.id }}-{{ ad.title }}--belong to advertiser {{ ad.advertiser.id }}-{{ ad.advertiser.name }}
+                views: {{ ad.views }} clicks: {{ ad.clicks }}
+            </li>
+        {% endfor %}
+    </ul>
   </body>
 </html>
