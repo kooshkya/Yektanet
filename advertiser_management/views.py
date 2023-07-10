@@ -45,5 +45,4 @@ def ad_page(request):
 
 def handle_click(request, ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
-    Click.objects.create(ad=ad, clicker_ip=request.META["REMOTE_ADDR"], click_time=timezone.now())
     return HttpResponseRedirect(ad.link)

@@ -7,7 +7,6 @@ class ViewCounter:
         self.get_response = get_response
 
     def __call__(self, request):
-        print(f"going for {request.path}")
         if request.path.endswith("ad_page/"):
             for advertiser in Advertiser.objects.all():
                 for ad in advertiser.ad_set.all():
