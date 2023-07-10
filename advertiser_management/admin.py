@@ -11,3 +11,13 @@ class AdvertiserAdmin(admin.ModelAdmin):
 @admin.register(Ad)
 class AdAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(Click)
+class ClickAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ViewEvent)
+class ViewEventAdmin(admin.ModelAdmin):
+    pass
