@@ -10,7 +10,9 @@ class AdvertiserAdmin(admin.ModelAdmin):
 
 @admin.register(Ad)
 class AdAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['title', 'advertiser', 'approved']
+    search_fields = ['title']
+    list_filter = ['approved']
 
 
 @admin.register(Click)
