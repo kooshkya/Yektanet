@@ -1,6 +1,7 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from .models import *
 
 
@@ -39,10 +40,7 @@ def create_advertiser(request):
 def ad_page(request):
     for advertiser in Advertiser.objects.all():
         for ad in advertiser.ads():
-            ad.views += 1
-            advertiser.views += 1
-            ad.save()
-        advertiser.save()
+            ViewEvent.objects.create(ad=ad, view_time=timezone.now(), view_ip=request.META["REMOTE_ADDR"])
 
     return render(request, "advertiser_management/ads.html", context={
         'advertisers': Advertiser.objects.all(),
@@ -51,8 +49,5 @@ def ad_page(request):
 
 def handle_click(request, ad_id):
     ad = get_object_or_404(Ad, pk=ad_id)
-    ad.clicks += 1
-    ad.advertiser.clicks += 1
-    ad.save()
-    ad.advertiser.save()
+    Click.objects.create(ad=ad, clicker_ip=request.META["REMOTE_ADDR"], click_time=timezone.now())
     return HttpResponseRedirect(ad.link)
