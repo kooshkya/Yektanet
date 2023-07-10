@@ -27,6 +27,7 @@ class Ad(models.Model):
     imgUrl = models.TextField()
     link = models.TextField()
     advertiser = models.ForeignKey(to="Advertiser", on_delete=models.CASCADE, null=True, related_name="ad_set")
+    approved = models.BooleanField(blank=False, null=False, default=False)
 
     def views(self):
         return self.viewevent_set.count()
