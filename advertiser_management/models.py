@@ -16,7 +16,7 @@ class Ad(models.Model):
     title = models.TextField()
     imgUrl = models.TextField()
     link = models.TextField()
-    advertiser = models.ForeignKey(to="Advertiser", on_delete=models.CASCADE, null=True, related_name="ads")
+    advertiser = models.ForeignKey(to="Advertiser", on_delete=models.CASCADE, null=True, related_name="ad_set")
 
 
 class Click(models.Model):
