@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Ad</title>
+  </head>
+  <body>
+    <h1>Create An Ad!</h1>
+    {% if error_message %}
+        <h2>{{ error_message }}</h2>
+    {% endif %}
+    <form action="{% url 'advertiser_management:create_ad' %}" method="POST">
+        {% csrf_token %}
+        <label for="advertiser_id">Advertiser Id</label>
+        <input type="number" id="advertiser_id" name="advertiser_id">
+        <label for="image_url">Image Url</label>
+        <input type="text" id="image_url" name="image_url">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title">
+        <label for="link">Link</label>
+        <input type="text" id="link" name="link">
+
+        <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
