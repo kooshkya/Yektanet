@@ -1,6 +1,6 @@
-from django.db.models import Count, Q
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
+from django.db.models import Count, Q, F
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, CreateView, ListView
 from django.utils import timezone
 
@@ -65,6 +65,15 @@ class AdStatsView(ListView):
         con['ctr'] = con['total_clicks'] / con['total_views'] if con['total_views'] > 0 else None
         con['min_time'] = min_time
         con['max_time'] = max_time
+        clicks = list(Click.objects.all())
+        dt_sum = timezone.timedelta()
+        for click in clicks:
+            view = ViewEvent.objects.filter(view_ip=click.clicker_ip, ad=click.ad, view_time__lt=click.click_time)[0]
+            print(f"click: {click}, view: {view}")
+            click.delta_time = click.click_time - view.view_time
+            dt_sum += click.delta_time
+        dt_sum /= len(clicks)
+        con['avg_dt'] = dt_sum
         return con
 
     def get_queryset(self):

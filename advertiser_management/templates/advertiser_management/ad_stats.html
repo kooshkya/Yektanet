@@ -13,6 +13,7 @@
     <h2>ctr: {{ ctr }}</h2>
     <p>Views: {{ total_views }}</p>
     <p>Clicks: {{ total_clicks }}</p>
+    <p>Average delta time: {{ avg_dt }}</p>
     <ul>
         {% for ad in ads %}
             <li>{{ ad.title }} - {{ ad.click_count }} clicks from {{ ad.view_count }} views</li>
