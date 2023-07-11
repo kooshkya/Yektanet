@@ -1,15 +1,20 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from django.utils import timezone
+from django.views.generic import TemplateView, DetailView, ListView
+
 from .models import *
 
 
 # Create your views here.
-def index(request):
-    return render(request, "advertiser_management/index.html",
-                  context={'ads': Ad.objects.all().order_by("advertiser__name"),
-                           'advertisers': Advertiser.objects.all()})
+
+class IndexView(TemplateView):
+    template_name = "advertiser_management/index.html"
+
+    def get_context_data(self, **kwargs):
+        raw_context = super().get_context_data(**kwargs)
+        raw_context['ads'] = Ad.objects.all().order_by('advertiser__name')
+        raw_context['advertisers'] = Advertiser.objects.all()
 
 
 def create_ad(request):
