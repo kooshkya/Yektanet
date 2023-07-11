@@ -1,7 +1,7 @@
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView, DetailView, ListView, CreateView
+from django.views.generic import TemplateView, RedirectView, CreateView
 
 from .forms import CreateAdForm, CreateAdvertiserForm
 from .models import *
@@ -42,6 +42,7 @@ class AdPageView(TemplateView):
         return raw_context
 
 
-def handle_click(request, ad_id):
-    ad = get_object_or_404(Ad, pk=ad_id)
-    return HttpResponseRedirect(ad.link)
+class HandleClickView(RedirectView):
+    def get_redirect_url(self, *args, **kwargs):
+        ad = get_object_or_404(Ad, pk=kwargs['pk'])
+        return ad.link
