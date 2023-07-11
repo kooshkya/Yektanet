@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, CreateView
 
-from .forms import CreateAdForm
+from .forms import CreateAdForm, CreateAdvertiserForm
 from .models import *
 
 
@@ -25,14 +25,11 @@ class CreateAdView(CreateView):
     success_url = reverse_lazy("advertiser_management:ad_page", args=())
 
 
-def create_advertiser(request):
-    if request.method == 'POST':
-        name = request.POST["name"]
-        advertiser = Advertiser(name=name)
-        advertiser.save()
-        return HttpResponseRedirect(reverse("advertiser_management:index"))
-    elif request.method == 'GET':
-        return render(request, "advertiser_management/create_advertiser.html", None)
+class CreateAdvertiserView(CreateView):
+    model = Advertiser
+    form_class = CreateAdvertiserForm
+    template_name = "advertiser_management/create_advertiser.html"
+    success_url = reverse_lazy("advertiser_management:index")
 
 
 def ad_page(request):
