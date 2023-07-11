@@ -9,5 +9,5 @@ urlpatterns = [
     path("create_ad/", views.CreateAdView.as_view(), name="create_ad"),
     path("create_advertiser/", views.CreateAdvertiserView.as_view(), name="create_advertiser"),
     path("click/<int:pk>/", views.HandleClickView.as_view(), name="handle_click"),
-    path("ad_stats/", views.AdStatsView.as_view(), name="ad_stats")
+    path("ad_stats/<int:hour>/", views.AdStatsView.as_view(), name="ad_stats")
 ]

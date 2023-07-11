@@ -49,4 +49,14 @@ class HandleClickView(RedirectView):
 
 
 class AdStatsView(ListView):
-    pass
+    model = Ad
+    template_name = "advertiser_management/ad_stats.html"
+    context_object_name = "ads"
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        con = super().get_context_data(**kwargs)
+        con['hour'] = self.kwargs['hour']
+        return con
+
+
+
