@@ -8,10 +8,14 @@
   </head>
   <body>
     <h1>Ad Stats</h1>
-    <h2>{{ hour }}</h2>
+    <h2>{{ min_time }}</h2>
+    <h2>{{ max_time }}</h2>
+    <h2>ctr: {{ ctr }}</h2>
+    <p>Views: {{ total_views }}</p>
+    <p>Clicks: {{ total_clicks }}</p>
     <ul>
         {% for ad in ads %}
-            <li></li>
+            <li>{{ ad.title }} - {{ ad.click_count }} clicks from {{ ad.view_count }} views</li>
 
         {% endfor %}
     </ul>

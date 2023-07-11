@@ -26,9 +26,9 @@ class AdAdmin(admin.ModelAdmin):
 
 @admin.register(Click)
 class ClickAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['ad', 'click_time']
 
 
 @admin.register(ViewEvent)
 class ViewEventAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['ad', 'view_time']

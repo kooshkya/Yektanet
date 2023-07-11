@@ -33,19 +33,22 @@ class Ad(models.Model):
     approved = models.BooleanField(blank=False, null=False, default=False)
 
     def views(self):
-        return self.viewevent_set.count()
+        return self.view_set.count()
 
     def clicks(self):
         return self.click_set.count()
+
+    def __str__(self):
+        return f"{self.id}- {self.title}"
 
 
 class Click(models.Model):
     click_time = models.DateTimeField(default=django.utils.timezone.now)
     clicker_ip = models.GenericIPAddressField()
-    ad = models.ForeignKey(to="Ad", on_delete=models.CASCADE)
+    ad = models.ForeignKey(to="Ad", on_delete=models.CASCADE, related_name="click_set")
 
 
 class ViewEvent(models.Model):
     view_time = models.DateTimeField(default=django.utils.timezone.now)
     view_ip = models.GenericIPAddressField()
-    ad = models.ForeignKey(to="Ad", on_delete=models.CASCADE)
+    ad = models.ForeignKey(to="Ad", on_delete=models.CASCADE, related_name="view_set")
