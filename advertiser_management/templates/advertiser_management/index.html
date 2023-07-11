@@ -8,6 +8,7 @@
   </head>
   <body>
     <h1>index</h1>
+    {{ advertisers }}
     <ul>
         {% for advertiser in advertisers %}
             <li>{{ advertiser.id }}-{{ advertiser.name }}-- views: {{ advertiser.views }} clicks: {{ advertiser.clicks }}</li>

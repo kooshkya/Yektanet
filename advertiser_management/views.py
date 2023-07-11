@@ -16,6 +16,7 @@ class IndexView(TemplateView):
         raw_context = super().get_context_data(**kwargs)
         raw_context['ads'] = Ad.objects.all().order_by('advertiser__name')
         raw_context['advertisers'] = Advertiser.objects.all()
+        return raw_context
 
 
 class CreateAdView(CreateView):
