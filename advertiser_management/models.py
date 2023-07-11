@@ -21,6 +21,9 @@ class Advertiser(models.Model):
             count += ad.clicks()
         return count
 
+    def __str__(self):
+        return f"{self.id}- {self.name}"
+
 
 class Ad(models.Model):
     title = models.TextField()
