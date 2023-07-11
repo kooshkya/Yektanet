@@ -8,22 +8,11 @@
   </head>
   <body>
     <h1>Create An Ad!</h1>
-    {% if error_message %}
-        <h2>{{ error_message }}</h2>
-    {% endif %}
-    <form action="{% url 'advertiser_management:create_ad' %}" method="POST">
-        {% csrf_token %}
-        <label for="advertiser_id">Advertiser Id</label>
-        <input type="number" id="advertiser_id" name="advertiser_id">
-        <label for="image_url">Image Url</label>
-        <input type="text" id="image_url" name="image_url">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title">
-        <label for="link">Link</label>
-        <input type="text" id="link" name="link">
-
-        <input type="submit" value="Submit">
-    </form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Create</button>
+          </form>
     <a href="{% url 'advertiser_management:index' %}">Cancel</a>
   </body>
 </html>
