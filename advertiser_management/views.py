@@ -33,10 +33,13 @@ class CreateAdvertiserView(CreateView):
     success_url = reverse_lazy("advertiser_management:index")
 
 
-def ad_page(request):
-    return render(request, "advertiser_management/ads.html", context={
-        'advertisers': Advertiser.objects.all(),
-    })
+class AdPageView(TemplateView):
+    template_name = "advertiser_management/ads.html"
+
+    def get_context_data(self, **kwargs):
+        raw_context = super().get_context_data(**kwargs)
+        raw_context['advertisers'] = Advertiser.objects.all()
+        return raw_context
 
 
 def handle_click(request, ad_id):
