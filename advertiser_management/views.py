@@ -102,15 +102,3 @@ class AdStatsView(ListView):
 
     def get_queryset(self):
         return None
-        # hour = self.kwargs['hour']
-        # max_time = timezone.now() - timezone.timedelta(hours=hour)
-        # min_time = max_time - timezone.timedelta(hours=1)
-        # return Ad.objects.annotate(
-        #     click_count=Count('click_set',
-        #                       filter=(Q(click_set__click_time__lt=max_time) & Q(click_set__click_time__gt=min_time)),
-        #                       distinct=True)
-        #     ,
-        #     view_count=Count('view_set',
-        #                      filter=(Q(click_set__click_time__lt=max_time) & Q(view_set__view_time__gt=min_time)),
-        #                      distinct=True)
-        # )
