@@ -11,6 +11,7 @@ class AdvertiserAdmin(admin.ModelAdmin):
 @admin.register(Ad)
 class AdAdmin(admin.ModelAdmin):
     list_display = ['title', 'advertiser', 'approved']
+    list_editable = ['approved',]
     search_fields = ['title']
     list_filter = ['approved']
     actions = ['approve_ads', 'disapprove_ads']
