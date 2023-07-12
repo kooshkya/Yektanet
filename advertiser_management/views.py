@@ -74,18 +74,43 @@ class AdStatsView(ListView):
             dt_sum += click.delta_time
         dt_sum /= len(clicks)
         con['avg_dt'] = dt_sum
+        object_list = list(Ad.objects.all())
+        for o in object_list:
+            o.click_count = 0
+            o.view_count = 0
+        self.get_clicks(object_list, min_time, max_time)
+        self.get_views(object_list, min_time, max_time)
+        con['ads'] = object_list
+        con['object_list'] = object_list
         return con
 
+    @staticmethod
+    def get_clicks(object_list: list, min_time, max_time):
+        clicks = Click.objects.filter(click_time__lt=max_time, click_time__gt=min_time)
+        for click in clicks:
+            ad = click.ad
+            object_in_list = object_list[object_list.index(ad)]
+            object_in_list.click_count = object_in_list.click_count + 1 if object_in_list.click_count is not None else 1
+
+    @staticmethod
+    def get_views(object_list: list, min_time, max_time):
+        views = ViewEvent.objects.filter(view_time__lt=max_time, view_time__gt=min_time)
+        for view in views:
+            ad = view.ad
+            object_in_list = object_list[object_list.index(ad)]
+            object_in_list.view_count = object_in_list.view_count + 1 if object_in_list.view_count is not None else 1
+
     def get_queryset(self):
-        hour = self.kwargs['hour']
-        max_time = timezone.now() - timezone.timedelta(hours=hour)
-        min_time = max_time - timezone.timedelta(hours=1)
-        return Ad.objects.annotate(
-            click_count=Count('click_set',
-                              filter=(Q(click_set__click_time__lt=max_time) & Q(click_set__click_time__gt=min_time)),
-                              distinct=True)
-            ,
-            view_count=Count('view_set',
-                             filter=(Q(click_set__click_time__lt=max_time) & Q(view_set__view_time__gt=min_time)),
-                             distinct=True)
-        )
+        return None
+        # hour = self.kwargs['hour']
+        # max_time = timezone.now() - timezone.timedelta(hours=hour)
+        # min_time = max_time - timezone.timedelta(hours=1)
+        # return Ad.objects.annotate(
+        #     click_count=Count('click_set',
+        #                       filter=(Q(click_set__click_time__lt=max_time) & Q(click_set__click_time__gt=min_time)),
+        #                       distinct=True)
+        #     ,
+        #     view_count=Count('view_set',
+        #                      filter=(Q(click_set__click_time__lt=max_time) & Q(view_set__view_time__gt=min_time)),
+        #                      distinct=True)
+        # )
