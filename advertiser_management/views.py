@@ -87,18 +87,20 @@ class AdStatsView(ListView):
     @staticmethod
     def get_clicks(object_list: list, min_time, max_time):
         clicks = Click.objects.filter(click_time__lt=max_time, click_time__gt=min_time)
+        clicks = clicks.values('ad_id').annotate(click_count=Count('ad_id'))
         for click in clicks:
-            ad = click.ad
+            ad = Ad.objects.get(pk=click['ad_id'])
             object_in_list = object_list[object_list.index(ad)]
-            object_in_list.click_count = object_in_list.click_count + 1 if object_in_list.click_count is not None else 1
+            object_in_list.click_count = click['click_count']
 
     @staticmethod
     def get_views(object_list: list, min_time, max_time):
         views = ViewEvent.objects.filter(view_time__lt=max_time, view_time__gt=min_time)
+        views = views.values('ad_id').annotate(view_count=Count('ad_id'))
         for view in views:
-            ad = view.ad
+            ad = Ad.objects.get(pk=view['ad_id'])
             object_in_list = object_list[object_list.index(ad)]
-            object_in_list.view_count = object_in_list.view_count + 1 if object_in_list.view_count is not None else 1
+            object_in_list.view_count = view['view_count']
 
     def get_queryset(self):
         return None
