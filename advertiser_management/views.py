@@ -3,6 +3,11 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, CreateView, ListView
 from django.utils import timezone
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from rest_framework import authentication
+from . import serializers
 
 from .forms import CreateAdForm, CreateAdvertiserForm
 from .models import *
@@ -32,6 +37,15 @@ class CreateAdvertiserView(CreateView):
     form_class = CreateAdvertiserForm
     template_name = "advertiser_management/create_advertiser.html"
     success_url = reverse_lazy("advertiser_management:index")
+
+
+class AdListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        print('hello')
+        serializer = serializers.AdModelSerializer(Ad.objects.all(), many=True)
+        return Response(serializer.data)
 
 
 class AdPageView(TemplateView):

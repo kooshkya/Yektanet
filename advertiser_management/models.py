@@ -29,7 +29,7 @@ class Ad(models.Model):
     title = models.TextField()
     imgUrl = models.TextField()
     link = models.TextField()
-    advertiser = models.ForeignKey(to="Advertiser", on_delete=models.CASCADE, null=True, related_name="ad_set")
+    advertiser = models.ForeignKey(to="Advertiser", on_delete=models.CASCADE, related_name="ad_set")
     approved = models.BooleanField(blank=False, null=False, default=False)
 
     def views(self):
