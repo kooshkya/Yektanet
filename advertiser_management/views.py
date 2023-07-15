@@ -3,6 +3,11 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView, CreateView, ListView
 from django.utils import timezone
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from rest_framework import authentication
+from . import serializers
 
 from .forms import CreateAdForm, CreateAdvertiserForm
 from .models import *
@@ -20,6 +25,19 @@ class IndexView(TemplateView):
         return raw_context
 
 
+class CreateAdAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = serializers.AdSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=200, data=serializer.data)
+        else:
+            return Response(status=400, data=serializer.errors)
+
+
 class CreateAdView(CreateView):
     model = Ad
     form_class = CreateAdForm
@@ -27,11 +45,32 @@ class CreateAdView(CreateView):
     success_url = reverse_lazy("advertiser_management:ad_page", args=())
 
 
+class CreateAdvertiserAPI(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        data = request.data
+        serializer = serializers.AdvertiserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=200, data=serializer.data)
+        else:
+            return Response(status=400, data=serializer.errors)
+
+
 class CreateAdvertiserView(CreateView):
     model = Advertiser
     form_class = CreateAdvertiserForm
     template_name = "advertiser_management/create_advertiser.html"
     success_url = reverse_lazy("advertiser_management:index")
+
+
+class AdPageAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        serializer = serializers.AdSerializer(Ad.objects.order_by("id").all(), many=True)
+        return Response(serializer.data)
 
 
 class AdPageView(TemplateView):
