@@ -6,10 +6,19 @@ from .models import *
 class AdModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
-        fields = ['title', 'imgUrl', 'link', 'advertiser', 'approved', 'views', 'clicks']
+        fields = ['id', 'title', 'imgUrl', 'link', 'advertiser', 'approved', 'views', 'clicks']
+        read_only_fields = ['id']
+
+
+class AdvertiserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertiser
+        fields = ['id', 'name']
+        read_only_fields = ['id']
 
 
 class AdSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     title = serializers.CharField()
     imgUrl = serializers.CharField()
     link = serializers.CharField()

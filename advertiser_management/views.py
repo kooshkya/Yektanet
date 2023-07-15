@@ -45,6 +45,19 @@ class CreateAdView(CreateView):
     success_url = reverse_lazy("advertiser_management:ad_page", args=())
 
 
+class CreateAdvertiserAPI(APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        data = request.data
+        serializer = serializers.AdvertiserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=200, data=serializer.data)
+        else:
+            return Response(status=400, data=serializer.errors)
+
+
 class CreateAdvertiserView(CreateView):
     model = Advertiser
     form_class = CreateAdvertiserForm
@@ -56,8 +69,7 @@ class AdPageAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print('hello')
-        serializer = serializers.AdModelSerializer(Ad.objects.all(), many=True)
+        serializer = serializers.AdSerializer(Ad.objects.order_by("id").all(), many=True)
         return Response(serializer.data)
 
 
