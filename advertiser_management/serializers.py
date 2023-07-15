@@ -13,7 +13,7 @@ class AdSerializer(serializers.Serializer):
     title = serializers.CharField()
     imgUrl = serializers.CharField()
     link = serializers.CharField()
-    advertiser = serializers.PrimaryKeyRelatedField(queryset=Advertiser.objects.all(), pk_field='id')
+    advertiser = serializers.PrimaryKeyRelatedField(queryset=Advertiser.objects.all())
     approved = serializers.BooleanField()
     views = serializers.IntegerField(read_only=True)
     clicks = serializers.IntegerField(read_only=True)

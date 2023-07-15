@@ -25,6 +25,19 @@ class IndexView(TemplateView):
         return raw_context
 
 
+class CreateAdAPI(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        serializer = serializers.AdSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=200, data=serializer.data)
+        else:
+            return Response(status=400, data=serializer.errors)
+
+
 class CreateAdView(CreateView):
     model = Ad
     form_class = CreateAdForm
@@ -39,7 +52,7 @@ class CreateAdvertiserView(CreateView):
     success_url = reverse_lazy("advertiser_management:index")
 
 
-class AdListView(APIView):
+class AdPageAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
