@@ -12,5 +12,6 @@ urlpatterns = [
     path("create_advertiser/", views.CreateAdvertiserView.as_view(), name="create_advertiser"),
     path("api/create_advertiser/", views.CreateAdvertiserAPI.as_view(), name="create_advertiser_api"),
     path("click/<int:pk>/", views.HandleClickView.as_view(), name="handle_click"),
-    path("ad_stats/<int:hour>/", views.AdStatsView.as_view(), name="ad_stats")
+    path("ad_stats/<int:hour>/", views.AdStatsView.as_view(), name="ad_stats"),
+    path("api/ad_stats/<int:hour>/", views.AdStatsAPI.as_view(), name="ad_stats_api"),
 ]

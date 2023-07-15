@@ -88,6 +88,35 @@ class HandleClickView(RedirectView):
         return ad.link
 
 
+class AdStatsAPI(APIView):
+    def get(self, request, hour):
+        con = {'hour': hour}
+        max_time = timezone.now() - timezone.timedelta(hours=hour)
+        min_time = max_time - timezone.timedelta(hours=1)
+        con['total_views'] = ViewEvent.objects.filter(view_time__lt=max_time, view_time__gt=min_time).count()
+        con['total_clicks'] = Click.objects.filter(click_time__lt=max_time, click_time__gt=min_time).count()
+        con['ctr'] = con['total_clicks'] / con['total_views'] if con['total_views'] > 0 else None
+        con['min_time'] = min_time
+        con['max_time'] = max_time
+        clicks = list(Click.objects.all())
+        dt_sum = timezone.timedelta()
+        for click in clicks:
+            view = ViewEvent.objects.filter(view_ip=click.clicker_ip, ad=click.ad, view_time__lt=click.click_time)[0]
+            print(f"click: {click}, view: {view}")
+            click.delta_time = click.click_time - view.view_time
+            dt_sum += click.delta_time
+        dt_sum /= len(clicks)
+        con['avg_dt'] = dt_sum
+        object_list = list(Ad.objects.all())
+        for o in object_list:
+            o.click_count = 0
+            o.view_count = 0
+        AdStatsView.get_clicks(object_list, min_time, max_time)
+        AdStatsView.get_views(object_list, min_time, max_time)
+        con['ads'] = serializers.AdSerializer(object_list, many=True).data
+        return Response(con)
+
+
 class AdStatsView(ListView):
     model = Ad
     template_name = "advertiser_management/ad_stats.html"
