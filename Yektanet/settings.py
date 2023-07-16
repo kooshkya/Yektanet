@@ -132,3 +132,13 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+
+CELERY_BROKER_URL = 'amqp://'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BEAT_SCHEDULE = {
+    'say hello': {
+        'task': 'advertiser_management.record_hourly_records',
+        'schedule': 10.0,
+    }
+}
