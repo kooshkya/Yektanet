@@ -1,6 +1,6 @@
 from django.db import models
 import django.utils.timezone
-
+from django.utils import timezone
 
 # Create your models here.
 class Advertiser(models.Model):
@@ -52,3 +52,10 @@ class ViewEvent(models.Model):
     view_time = models.DateTimeField(default=django.utils.timezone.now)
     view_ip = models.GenericIPAddressField()
     ad = models.ForeignKey(to="Ad", on_delete=models.CASCADE, related_name="view_set")
+
+
+class HourlyReport(models.Model):
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+    clicks = models.IntegerField()
+    views = models.IntegerField()
+    time = models.DateTimeField(default=timezone.now)
