@@ -31,9 +31,9 @@ class CreateAdAPI(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         serializer = serializers.AdSerializer(data=data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
-            return Response(status=200, data=serializer.data)
+            return Response(status=200, data=serializer.validated_data)
         else:
             return Response(status=400, data=serializer.errors)
 
@@ -53,7 +53,7 @@ class CreateAdvertiserAPI(APIView):
         serializer = serializers.AdvertiserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(status=200, data=serializer.data)
+            return Response(status=200, data=serializer.validated_data)
         else:
             return Response(status=400, data=serializer.errors)
 
