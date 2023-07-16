@@ -139,8 +139,12 @@ REST_FRAMEWORK = {
 CELERY_BROKER_URL = 'amqp://'
 CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_BEAT_SCHEDULE = {
-    'say hello': {
-        'task': 'advertiser_management.record_hourly_records',
-        'schedule': crontab(hour='*', minute='0'),
-    }
+    # 'save hourly record': {
+    #     'task': 'advertiser_management.record_hourly_records',
+    #     'schedule': crontab(hour='*', minute='0'),
+    # },
+    # 'save daily record': {
+    #     'task': 'advertiser_management.record_daily_records',
+    #     'schedule': crontab(hour='0', minute='0')
+    # }
 }
